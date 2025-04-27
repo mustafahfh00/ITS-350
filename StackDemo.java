@@ -65,6 +65,14 @@ class Stack {
             System.out.println();
         }
     }
+     public int search(int target) {
+        for (int i = top; i >= 0; i--) {
+            if (stackArray[i] == target) {
+                return (top - i) + 1;  // Position from top (1-based)
+            }
+        }
+        return -1;  // Element not found
+    }
 }
 
 public class StackDemo {
