@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "StackDemo",
+      "request": "launch",
+      "mainClass": "StackDemo",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
       "name": "StackPractice",
       "request": "launch",
       "mainClass": "StackPractice",

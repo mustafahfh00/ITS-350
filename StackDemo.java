@@ -85,6 +85,8 @@ public class StackDemo {
         stack.push(20);
         stack.push(30);
         stack.push(40);
+        stack.search(10);
+       stack.print();
 
         // Print the stack
         System.out.println("Stack after pushing elements:");
@@ -110,5 +112,8 @@ public class StackDemo {
         stack.clear();
         System.out.println("Stack after clearing:");
         stack.print();
+       
+
+
     }
 }
