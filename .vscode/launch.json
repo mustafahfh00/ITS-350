@@ -1,0 +1,77 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "QueueMain",
+      "request": "launch",
+      "mainClass": "QueueMain",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "BinaryTree",
+      "request": "launch",
+      "mainClass": "BinaryTree",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "MeetingSchedualer1",
+      "request": "launch",
+      "mainClass": "MeetingSchedualer1",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "Binary",
+      "request": "launch",
+      "mainClass": "Binary",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "BinaryRecursion",
+      "request": "launch",
+      "mainClass": "BinaryRecursion",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "LinearSearch",
+      "request": "launch",
+      "mainClass": "LinearSearch",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "MeetingSchedualer",
+      "request": "launch",
+      "mainClass": "MeetingSchedualer",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "Queue",
+      "request": "launch",
+      "mainClass": "Queue",
+      "projectName": "practicer_4eaf0b05"
+    },
+    {
+      "type": "java",
+      "name": "Solution",
+      "request": "launch",
+      "mainClass": "Solution",
+      "projectName": "practicer_4eaf0b05"
+    }
+  ]
+}
