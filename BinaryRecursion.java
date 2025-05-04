@@ -3,21 +3,25 @@ public class BinaryRecursion {
     public static void main(String[] args) {
         int[] list = {14, 15, 17, 19, 20};  // The sorted list for binary search
 
-        BinaryRecursion search = new BinaryRecursion();  // Create an instance of BinaryRecursion
-        
+         // Create an instance of BinaryRecursion
+        Binary1 B = new Binary1();
         // Choose a key to search for (change this key to test different cases)
         int key = 17;
 
         // Call the iterative find method
-        int resultIterative = search.find(key, list);
-        search.display(resultIterative, key, "Iterative");
+        int resultIterative = B.find(key, list);
+        B.display(resultIterative, key, "Iterative");
 
         // Call the recursive binarySR method
-        int resultRecursive = search.binarySR(key, list, 0, list.length - 1);
-        search.display(resultRecursive, key, "Recursive");
+        int resultRecursive = B.binarySR(key, list, 0, list.length - 1);
+        B.display(resultRecursive, key, "Recursive");
     }
 
-    // Iterative binary search method
+   
+}
+class Binary1
+{
+     // Iterative binary search method
     public int find(int key, int[] list) {
         int lowIndex = 0;
         int highIndex = list.length - 1;

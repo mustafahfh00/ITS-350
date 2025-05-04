@@ -62,7 +62,8 @@ public class QueueMain {  // Only QueueMain is public
         Queue q = new Queue(3);
 
         q.enQueue(2);    
-        q.enQueue(3);    
+        q.enQueue(3); 
+        q.deQueue();   
         q.enQueue(12);   
         q.enQueue(19);   
 

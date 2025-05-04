@@ -9,7 +9,38 @@ class Node {
 }
 
 public class BinaryTree {
-    Node root;
+
+    public static void main(String[] args) {
+        BinaryTreeComponent bt = new BinaryTreeComponent();
+
+        bt.insert(5);
+        bt.insert(3);
+        bt.insert(4);
+        bt.insert(2);
+        bt.insert(8);
+        bt.insert(1);
+        bt.insert(9);
+
+        System.out.println("In-order Traversal:");
+        bt.inOrder(bt.root);
+        System.out.println("\n");
+
+        System.out.println("Pre-order Traversal:");
+        bt.preOrder(bt.root);
+        System.out.println("\n");
+
+        System.out.println("Post-order Traversal:");
+        bt.postOrder(bt.root);
+        System.out.println("\n");
+
+        // Testing find method
+        System.out.println("Find 4: " + bt.find(4)); // Should print true
+        System.out.println("Find 10: " + bt.find(10)); // Should print false
+    }
+}
+class BinaryTreeComponent
+{
+        Node root;
 
     public void insert(int data) {
         Node newNode = new Node(data); // Use the correct data
@@ -79,31 +110,4 @@ public class BinaryTree {
         }
     }
 
-    public static void main(String[] args) {
-        BinaryTree bt = new BinaryTree();
-
-        bt.insert(5);
-        bt.insert(3);
-        bt.insert(4);
-        bt.insert(2);
-        bt.insert(8);
-        bt.insert(1);
-        bt.insert(9);
-
-        System.out.println("In-order Traversal:");
-        bt.inOrder(bt.root);
-        System.out.println("\n");
-
-        System.out.println("Pre-order Traversal:");
-        bt.preOrder(bt.root);
-        System.out.println("\n");
-
-        System.out.println("Post-order Traversal:");
-        bt.postOrder(bt.root);
-        System.out.println("\n");
-
-        // Testing find method
-        System.out.println("Find 4: " + bt.find(4)); // Should print true
-        System.out.println("Find 10: " + bt.find(10)); // Should print false
-    }
 }

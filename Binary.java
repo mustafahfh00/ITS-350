@@ -3,7 +3,7 @@ public class Binary {
     public static void main(String[] args) {
         int[] list = {14, 15, 17, 19, 20};
 
-        Binary search = new Binary();
+        
         int key = 17;  // Example: we search for 17
 
         int result = search.find(key, list);
