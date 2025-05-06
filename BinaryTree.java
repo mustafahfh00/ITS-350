@@ -109,5 +109,49 @@ class BinaryTreeComponent
             System.out.print(node.data + ", ");
         }
     }
+    public void delete(int data) {
+    root = deleteRecursive(root, data);
+}
+
+private Node deleteRecursive(Node current, int data) {
+    if (current == null) {
+        return null;
+    }
+
+    if (data < current.data) {
+        current.leftChild = deleteRecursive(current.leftChild, data);
+    } else if (data > current.data) {
+        current.rightChild = deleteRecursive(current.rightChild, data);
+    } else {
+        // Node to delete found
+
+        // Case 1: No children (leaf)
+        if (current.leftChild == null && current.rightChild == null) {
+            return null;
+        }
+
+        // Case 2: Only one child
+        if (current.leftChild == null) {
+            return current.rightChild;
+        } else if (current.rightChild == null) {
+            return current.leftChild;
+        }
+
+        // Case 3: Two children
+        Node successor = findMin(current.rightChild); // in-order successor
+        current.data = successor.data;
+        current.rightChild = deleteRecursive(current.rightChild, successor.data);
+    }
+
+    return current;
+}
+
+private Node findMin(Node node) {
+    while (node.leftChild != null) {
+        node = node.leftChild;
+    }
+    return node;
+}
+
 
 }
