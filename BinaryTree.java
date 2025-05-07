@@ -20,6 +20,7 @@ public class BinaryTree {
         bt.insert(8);
         bt.insert(1);
         bt.insert(9);
+        bt.delete(9);
 
         System.out.println("In-order Traversal:");
         bt.inOrder(bt.root);
