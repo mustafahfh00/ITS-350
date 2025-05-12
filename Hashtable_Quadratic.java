@@ -13,33 +13,42 @@ public class HashTable {
         if (items < hashtable.length) {
             Entry element = new Entry(key, val);
             int hashedKey = hashFunction(key);
+            int indexQuad = hashedKey;
+            int step = 1;
 
             // Linear probing to find an empty or deleted slot
-            while (hashtable[hashedKey] != null && hashtable[hashedKey] != deleted) {
-                hashedKey = hashFunction(hashedKey + 1);
+            while (hashtable[indexQuad] != null && hashtable[indexQuad] != deleted) {
+                indexQuad = hashedKey + quadratic(step);
+                indexQuad =hashFunction(indexQuad);
+                step++;
             }
 
-            hashtable[hashedKey] = element;
+            hashtable[indexQuad] = element;
             items++;
         }
+
+    }
+    public int quadratic(int step)
+    {
+        return step*step;
     }
 
-    public boolean delete(int key) {
-        if (items > 0) {
-            int hashedKey = hashFunction(key);
+    // public boolean delete(int key) {
+    //     if (items > 0) {
+    //         int hashedKey = hashFunction(key);
 
-            // Linear probing to find the matching key
-            while (hashtable[hashedKey] != null) {
-                if (hashtable[hashedKey] != deleted && hashtable[hashedKey].key == key) {
-                    hashtable[hashedKey] = deleted;
-                    items--;
-                    return true;
-                }
-                hashedKey = hashFunction(hashedKey + 1);
-            }
-        }
-        return false;
-    }
+    //         // Linear probing to find the matching key
+    //         while (hashtable[hashedKey] != null) {
+    //             if (hashtable[hashedKey] != deleted && hashtable[hashedKey].key == key) {
+    //                 hashtable[hashedKey] = deleted;
+    //                 items--;
+    //                 return true;
+    //             }
+    //             hashedKey = hashFunction(hashedKey + 1);
+    //         }
+    //     }
+    //     return false;
+    // }
 
     public void display() {
         for (int i = 0; i < hashtable.length; i++) {
