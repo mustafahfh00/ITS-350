@@ -1,10 +1,10 @@
-public class HashTable {
+public class Hashtable_Quadratic {
 
     Entry[] hashtable;
     int items;
     Entry deleted;
 
-    public HashTable(int size) {
+    public Hashtable_Quadratic(int size) {
         hashtable = new Entry[size];
         deleted = new Entry(-1, 0); // Tombstone entry
     }
@@ -49,7 +49,7 @@ public class HashTable {
     //     }
     //     return false;
     // }
-
+// the above commented method is included in the quiz and I need to modify it 
     public void display() {
         for (int i = 0; i < hashtable.length; i++) {
             if (hashtable[i] != null && hashtable[i] != deleted) {
@@ -69,13 +69,9 @@ public class HashTable {
     hashtable.put(2, 12);
     hashtable.put(13, 0);
     hashtable.put(24, 5);
-    hashtable.display();
-
-    System.out.println("Deleting key 13: " + hashtable.delete(13));
-    hashtable.display();
+    
 }
 
 }
 // double hashing (probing) is homework
-
 
