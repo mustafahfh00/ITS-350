@@ -33,23 +33,27 @@ public class Hashtable_Quadratic {
         return step*step;
     }
 
-    // public boolean delete(int key) {
-    //     if (items > 0) {
-    //         int hashedKey = hashFunction(key);
-
-    //         // Linear probing to find the matching key
-    //         while (hashtable[hashedKey] != null) {
-    //             if (hashtable[hashedKey] != deleted && hashtable[hashedKey].key == key) {
-    //                 hashtable[hashedKey] = deleted;
-    //                 items--;
-    //                 return true;
-    //             }
-    //             hashedKey = hashFunction(hashedKey + 1);
-    //         }
-    //     }
-    //     return false;
-    // }
-// the above commented method is included in the quiz and I need to modify it 
+    public boolean delete(int key) {
+        if (items > 0) {
+            int hashedKey = hashFunction(key);
+            int indexQuad = hashedKey;
+            int step = 1;
+    
+            // Quadratic probing to find the matching key
+            while (hashtable[indexQuad] != null) {
+                if (hashtable[indexQuad] != deleted && hashtable[indexQuad].key == key) {
+                    hashtable[indexQuad] = deleted;
+                    items--;
+                    return true;
+                }
+    
+                indexQuad = hashedKey + quadratic(step);
+                indexQuad = hashFunction(indexQuad); // wrap around
+                step++;
+            }
+        }
+        return false;
+    } 
     public void display() {
         for (int i = 0; i < hashtable.length; i++) {
             if (hashtable[i] != null && hashtable[i] != deleted) {
