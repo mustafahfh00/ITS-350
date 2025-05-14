@@ -1,10 +1,10 @@
-public class HashTable {
+public class HashTable_LinearProbing {
 
     Entry[] hashtable;
     int items;
     Entry deleted;
 
-    public HashTable(int size) {
+    public HashTable_LinearProbing(int size) {
         hashtable = new Entry[size];
         deleted = new Entry(-1, 0); // Tombstone entry
     }
@@ -56,7 +56,7 @@ public class HashTable {
     }
 
     public static void main(String[] args) {
-    HashTable hashtable = new HashTable(11);
+    HashTable_LinearProbing hashtable = new HashTable_LinearProbing(11);
     hashtable.put(2, 12);
     hashtable.put(13, 0);
     hashtable.put(24, 5);
