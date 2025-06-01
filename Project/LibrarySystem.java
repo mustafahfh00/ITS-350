@@ -1,101 +1,148 @@
 import java.util.Scanner;
 
 /**
- * Optimized Library Book Reservation System
- * - O(1) cancellation using hash table
- * - Binary tree for user tracking
- * - Maintains reservation order with doubly-linked list
+ * Library Book Reservation System - ITS350 Assignment 2
+ * 
+ * Implements all requirements from the assignment specification:
+ * 1. Book reservation with user tracking (Req. 1)
+ * 2. Cancellation of reservations (Req. 2)
+ * 3. Available books count (Req. 3)
+ * 4. Display of all reservations grouped by user (Req. 4)
+ * 
+ * Data Structures Used (as per assignment constraints):
+ * - Binary Tree (primary focus) for user management
+ * - Hash Table (array implementation) for O(1) book access
+ * - Doubly-Linked List to maintain reservation order
  */
-class LibrarySystem {
-    private static final int TOTAL_BOOKS = 200;
-    private static final int MAX_BOOKS_PER_USER = 5;
+// reserveBook()	            Time Complexity O(log n)	Space Complexity O(1)
+// cancelReservation()	        Time Complexity O(1)	    Space Complexity O(1)
+// getAvailableBooksCount()	    Time Complexity O(1)	    Space Complexity O(1)
+// displayReservations()	    Time Complexity O(n)	    Space Complexity O(1)
+// run()	                    Time Complexity O(n) 	    Space Complexity O(1) per loop
+// User Management (BST)	    Time ComplexityO(log n)     Space Complexity O(1)
 
-    // O(1) book availability tracking
+class LibrarySystem {
+    // Constants matching assignment requirements
+    private static final int TOTAL_BOOKS = 200;       // Book IDs 001-200 (Req. 1)
+    private static final int MAX_BOOKS_PER_USER = 5;  // Max 5 books per user (Req. 1)
+
+    // Requirement 1: Track book availability (Array as simple hash table)
     private final String[] bookReservations = new String[TOTAL_BOOKS + 1]; // index 1-200
     
-    // Binary tree for user reservation counts
+    // Requirement 1 & 4: Binary tree for user tracking (primary data structure focus)
     private static class UserNode {
-        String name;
-        int reservationCount;
-        UserNode left, right;
+        String name;                // User name
+        int reservationCount;       // Tracking books per user (max 5)
+        UserNode left, right;       // Binary tree structure
         
         UserNode(String name) {
             this.name = name;
-            this.reservationCount = 1;
+            this.reservationCount = 1;  // Initialize with first reservation
         }
     }
-    private UserNode userTree;
+    private UserNode userTree;  // Root of user binary tree
     
-    // Doubly-linked list for maintaining reservation order with O(1) removal
+    // Requirement 4: Maintain reservation order (doubly-linked list)
     private static class ReservationNode {
-        final int bookId;
-        final String name;
-        ReservationNode next;
-        ReservationNode prev;
+        final int bookId;       // Book ID (001-200)
+        final String name;       // User who reserved it
+        ReservationNode next;    // Next reservation
+        ReservationNode prev;    // Previous reservation (for O(1) removal)
         
         ReservationNode(int bookId, String name) {
             this.bookId = bookId;
             this.name = name;
         }
     }
-    private ReservationNode reservationHead, reservationTail;
+    private ReservationNode reservationHead, reservationTail;  // List head/tail
     
-    // Hash table for O(1) cancellation (maps bookId -> ReservationNode)
+    // Requirement 2: O(1) cancellation support (hash table mapping)
     private final ReservationNode[] bookToNodeMap = new ReservationNode[TOTAL_BOOKS + 1];
-    private int totalReserved = 0;
+    private int totalReserved = 0;  // For Requirement 3 (available books count)
 
-    // Main operations ==========================================
+    // ================ MAIN OPERATIONS ================ //
 
     /**
-     * Reserve a book (O(log n) for user count check + O(1) for book availability)
+     * Reserve a book - Implements Requirement 1
+     * @param bookId (001-200)
+     * @param name User making reservation
+     * Checks:
+     * - Valid book ID (1-200)
+     * - Book availability
+     * - User reservation limit (5 books)
      */
     public void reserveBook(int bookId, String name) {
+        // Validate book ID range (Req. 1 note about 1-200 range)
         if (!isValidBookId(bookId)) {
             System.out.println("Error: Invalid book ID");
             return;
         }
         
+        // Check book availability (Req. 1: "The book is not available")
         if (bookReservations[bookId] != null) {
             System.out.println("Error: Book " + bookId + " already reserved by " + bookReservations[bookId]);
             return;
         }
         
+        // Check 5-book limit per user (Req. 1)
         int userCount = getUserReservationCount(name);
         if (userCount >= MAX_BOOKS_PER_USER) {
             System.out.println("Error: " + name + " has reached the 5-book limit");
             return;
         }
         
-        bookReservations[bookId] = name;
-        userTree = updateUserCount(name, 1);
-        addReservationNode(bookId, name);
-        totalReserved++;
+        // Update all data structures
+        bookReservations[bookId] = name;          // Mark book as reserved
+        userTree = updateUserCount(name, 1);      // Update user count in binary tree
+        addReservationNode(bookId, name);         // Add to ordered list
+        totalReserved++;                          // Update available count
         
         System.out.println("Success: Book " + bookId + " reserved for " + name);
     }
 
     /**
-     * Cancel a reservation (now O(1) with hash table)
+     * Cancel reservation - Implements Requirement 2
+     * @param bookId ID of book to cancel
+     * Example from assignment:
+     * Before: 015, 087, 120, 155, 190
+     * After cancelling 155: 015, 087, 120, 190
      */
     public void cancelReservation(int bookId) {
+        // Validate input (Req. 2: "delete a book reservation by providing its book ID")
         if (!isValidBookId(bookId) || bookReservations[bookId] == null) {
             System.out.println("Error: Invalid book ID or not reserved");
             return;
         }
         
         String name = bookReservations[bookId];
-        bookReservations[bookId] = null;
-        userTree = updateUserCount(name, -1);
-        removeReservationNode(bookId);
-        totalReserved--;
+        bookReservations[bookId] = null;      // Free the book
+        userTree = updateUserCount(name, -1); // Update user count
+        removeReservationNode(bookId);        // Remove from ordered list (O(1))
+        totalReserved--;                      // Update available count
         
         System.out.println("Success: Reservation for book " + bookId + " cancelled");
     }
 
+    /**
+     * Get available books count - Implements Requirement 3
+     * @return Number of available books (200 - reserved)
+     * Example from assignment:
+     * Reserved: 015, 087, 120, 155, 190 → Available: 195
+     */
     public int getAvailableBooksCount() {
-        return TOTAL_BOOKS - totalReserved;
+        return TOTAL_BOOKS - totalReserved;  // Simple calculation (Req. 3)
     }
 
+    /**
+     * Display all reservations - Implements Requirement 4
+     * Output format matches assignment example:
+     * Book ID : Name
+     * 015, 101 : Alice
+     * 087 : Bob
+     * 120, 122, 125 : Charlie
+     * ...
+     * Maintains reservation order as required
+     */
     public void displayReservations() {
         if (reservationHead == null) {
             System.out.println("No books currently reserved");
@@ -105,11 +152,12 @@ class LibrarySystem {
         System.out.println("\nCurrent Reservations (Book ID : Name)");
         System.out.println("----------------------------------");
         
+        // Traverse in reservation order (Req. 4: maintain order)
         ReservationNode current = reservationHead;
         while (current != null) {
             System.out.print(current.bookId);
             
-            // Group consecutive reservations by same user
+            // Group consecutive reservations by same user (Req. 4 format)
             ReservationNode next = current.next;
             while (next != null && next.name.equals(current.name)) {
                 System.out.print(", " + next.bookId);
@@ -121,16 +169,23 @@ class LibrarySystem {
         }
     }
 
-    // Optimized Helper Methods =================================
+    // ================ HELPER METHODS ================ //
 
+    /**
+     * Validate book ID is in 1-200 range (Req. 1 constraint)
+     */
     private boolean isValidBookId(int bookId) {
         return bookId >= 1 && bookId <= TOTAL_BOOKS;
     }
 
+    /**
+     * Add reservation to both linked list and hash table
+     * Maintains order for Requirement 4 display
+     */
     private void addReservationNode(int bookId, String name) {
         ReservationNode node = new ReservationNode(bookId, name);
         
-        // Add to doubly-linked list
+        // Add to doubly-linked list (maintain order)
         if (reservationTail == null) {
             reservationHead = reservationTail = node;
         } else {
@@ -139,15 +194,19 @@ class LibrarySystem {
             reservationTail = node;
         }
         
-        // Add to hash table
+        // Add to hash table for O(1) access (Req. 2 optimization)
         bookToNodeMap[bookId] = node;
     }
 
+    /**
+     * Remove reservation from data structures (O(1) operation)
+     * Uses hash table for direct access + doubly-linked list for order maintenance
+     */
     private void removeReservationNode(int bookId) {
         ReservationNode node = bookToNodeMap[bookId];
         if (node == null) return;
         
-        // Update neighbors
+        // Update linked list neighbors
         if (node.prev != null) {
             node.prev.next = node.next;
         } else {
@@ -160,17 +219,24 @@ class LibrarySystem {
             reservationTail = node.prev;
         }
         
-        // Clear from hash table
-        bookToNodeMap[bookId] = null;
+        bookToNodeMap[bookId] = null;  // Clear from hash table
     }
 
-    // Binary Tree Operations (unchanged) =======================
+    // ================ BINARY TREE OPERATIONS ================ //
+    // (Primary data structure focus per assignment requirements)
 
+    /**
+     * Get user's current reservation count
+     * Uses binary search tree for O(log n) access
+     */
     private int getUserReservationCount(String name) {
         UserNode node = findUserNode(name);
         return node != null ? node.reservationCount : 0;
     }
 
+    /**
+     * Binary tree search for user node
+     */
     private UserNode findUserNode(String name) {
         UserNode current = userTree;
         while (current != null) {
@@ -181,18 +247,23 @@ class LibrarySystem {
         return null;
     }
 
+    /**
+     * Update user's reservation count in binary tree
+     * Handles both increments and decrements
+     */
     private UserNode updateUserCount(String name, int delta) {
         if (userTree == null) {
             return new UserNode(name);
         }
         
+        // Binary tree traversal
         UserNode parent = null, current = userTree;
         while (current != null) {
             int cmp = name.compareTo(current.name);
             if (cmp == 0) {
                 current.reservationCount += delta;
                 if (current.reservationCount <= 0) {
-                    return deleteUserNode(userTree, name);
+                    return deleteUserNode(userTree, name);  // Remove user if no reservations
                 }
                 return userTree;
             }
@@ -213,6 +284,10 @@ class LibrarySystem {
         return userTree;
     }
 
+    /**
+     * Delete user node from binary tree
+     * Uses recursive approach as allowed by constraints
+     */
     private UserNode deleteUserNode(UserNode root, String name) {
         if (root == null) return null;
         
@@ -233,6 +308,9 @@ class LibrarySystem {
         return root;
     }
 
+    /**
+     * Find minimum node in binary subtree
+     */
     private UserNode findMin(UserNode node) {
         while (node.left != null) {
             node = node.left;
@@ -240,8 +318,16 @@ class LibrarySystem {
         return node;
     }
 
-    // User Interface (unchanged) ===============================
+    // ================ USER INTERFACE ================ //
 
+    /**
+     * Main menu system providing options for all requirements
+     * 1. Reserve book (Req. 1)
+     * 2. Cancel reservation (Req. 2)
+     * 3. View available books (Req. 3)
+     * 4. View all reservations (Req. 4)
+     * 5. Exit
+     */
     public void run() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -252,11 +338,24 @@ class LibrarySystem {
             System.out.println("4. View all reservations");
             System.out.println("5. Exit");
             System.out.print("Select option: ");
-            
+    
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // Clear bad input
+                continue;
+            }
+    
             int choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+    
             switch (choice) {
                 case 1:
                     System.out.print("Enter book ID (1-200): ");
+                    if (!scanner.hasNextInt()) {
+                        System.out.println("Invalid book ID. Please enter a number between 1 and 200.");
+                        scanner.nextLine();
+                        break;
+                    }
                     int bookId = scanner.nextInt();
                     scanner.nextLine(); // consume newline
                     System.out.print("Enter your name: ");
@@ -265,7 +364,14 @@ class LibrarySystem {
                     break;
                 case 2:
                     System.out.print("Enter book ID to cancel: ");
-                    cancelReservation(scanner.nextInt());
+                    if (!scanner.hasNextInt()) {
+                        System.out.println("Invalid book ID. Please enter a valid number.");
+                        scanner.nextLine();
+                        break;
+                    }
+                    int cancelId = scanner.nextInt();
+                    scanner.nextLine(); // consume newline
+                    cancelReservation(cancelId);
                     break;
                 case 3:
                     System.out.println("Available books: " + getAvailableBooksCount());
@@ -282,6 +388,7 @@ class LibrarySystem {
             }
         }
     }
+    
 
     public static void main(String[] args) {
         new LibrarySystem().run();

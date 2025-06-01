@@ -85,3 +85,5 @@ public class Hashtable_Chaining {
         ht.display();
     }
 }
+// I have to either use a built-in Linked List package or make mulitple methods inside the chaining file like addLast, addFirst, addInBetween an so on...
+// as well in delete method I can use getEntry method frist then when i find the key I will delete it using the delete method.
